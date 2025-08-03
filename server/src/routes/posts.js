@@ -1,11 +1,13 @@
-import express from 'express';
-import { createPost, getAllPosts, getUserPosts } from '../controllers/postController.js';
-import auth from '../middleware/auth.js';
+import express from "express";
+import { createPost, getPosts } from "../controllers/postController.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post('/', auth, createPost);
-router.get('/', getAllPosts);
-router.get('/user/:id', getUserPosts);
+// ✅ Fetch all posts (public)
+router.get("/", getPosts);
+
+// ✅ Create a post (protected)
+router.post("/", auth, createPost);
 
 export default router;
