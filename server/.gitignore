@@ -1,12 +1,3 @@
-# Node
 node_modules/
-npm-debug.log
-yarn-error.log
-
-# Prisma
 .prisma/
 .env
-
-# Build artifacts
-dist/
-build/
