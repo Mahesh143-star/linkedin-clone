@@ -1,42 +1,32 @@
-import prisma from "../prismaClient.js";
+import prisma from '../prismaClient.js';
+import jwt from 'jsonwebtoken';
 
-// ✅ Fetch all posts
 export const getPosts = async (req, res) => {
   try {
-    const posts = await prisma.post.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        author: { select: { id: true, name: true, email: true } }, // Include author info
-      },
-    });
+    const posts = await prisma.post.findMany({ include: { author: true } });
     res.json(posts);
   } catch (err) {
-    console.error("Error fetching posts:", err.message);
-    res.status(500).json({ message: "Failed to fetch posts" });
+    res.status(500).json({ error: err.message });
   }
 };
 
-// ✅ Create a new post
 export const createPost = async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ message: 'No token provided' });
+
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { content } = req.body;
 
-    if (!content) return res.status(400).json({ message: "Content is required" });
-    if (!req.userId) return res.status(401).json({ message: "Unauthorized" });
-
-    const newPost = await prisma.post.create({
+    const post = await prisma.post.create({
       data: {
         content,
-        authorId: req.userId,
-      },
-      include: {
-        author: { select: { id: true, name: true, email: true } },
+        author: { connect: { id: decoded.id } },
       },
     });
 
-    res.status(201).json(newPost);
+    res.json(post);
   } catch (err) {
-    console.error("Error creating post:", err.message);
-    res.status(500).json({ message: "Failed to create post" });
+    res.status(500).json({ error: err.message });
   }
 };
