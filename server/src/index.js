@@ -8,6 +8,7 @@ import userRoutes from './routes/users.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
+
 if (!process.env.JWT_SECRET) {
   console.error('❌ JWT_SECRET is missing in .env');
   process.exit(1);
@@ -15,17 +16,47 @@ if (!process.env.JWT_SECRET) {
 
 const app = express();
 
-// Enable JSON & CORS
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// ✅ JSON Parser
 app.use(express.json());
 
-// Routes
+// ✅ Production & Development CORS
+const allowedOrigins = [
+  'http://localhost:3000',                     // Local frontend
+  'https://linkedin-clone.vercel.app',         // Replace with your actual Vercel domain
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS not allowed for this origin: ' + origin));
+      }
+    },
+    credentials: true,
+  })
+);
+
+// ✅ API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 
+// ✅ Health Check Route
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.send('✅ API is running...');
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// ✅ Global 404 for unknown routes
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// ✅ Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err.message);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
