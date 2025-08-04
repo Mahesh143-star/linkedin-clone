@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
+import "./Auth.css";
+
 
 const Register = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
