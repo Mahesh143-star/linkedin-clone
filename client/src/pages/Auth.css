@@ -1,53 +1,61 @@
+/* Center the auth container in the middle of the screen */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 70vh;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding: 20px;
 }
 
-.auth-card {
+/* The card-like form box */
+.auth-container form {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.auth-card h2 {
-  margin-bottom: 15px;
-}
-
-.auth-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
-.input,
-.textarea {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
+/* Title (Login/Register) */
+.auth-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #111827;
+}
+
+/* Input fields */
+.auth-container input {
+  padding: 12px;
+  font-size: 16px;
   border: 1px solid #ccc;
-  font-size: 1rem;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
-.btn {
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
+.auth-container input:focus {
+  border-color: #2563eb;
 }
 
-.btn-primary {
+/* Submit button */
+.auth-container button {
   background-color: #2563eb;
   color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
 }
 
-.btn-primary:hover {
+.auth-container button:hover {
   background-color: #1e40af;
 }
